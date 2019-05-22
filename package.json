@@ -68,6 +68,7 @@
     "react": "^15.0.1",
     "react-dom": "^15.5.4",
     "react-test-renderer": "^15.6.2",
+    "create-react-class": "15.6.3",
     "regenerator": "^0.8.42",
     "regenerator-loader": "^2.0.0",
     "sinon": "^4.4.2",
