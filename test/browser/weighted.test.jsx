@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import createReactClass from 'create-react-class';
 import WeightedExperiment from "../../src/WeightedExperiment.jsx";
 import Variant from "../../src/Variant.jsx";
 import emitter from "../../src/emitter.jsx";
@@ -39,7 +40,7 @@ describe("Weighted Experiment", function() {
     const weightSum = variantWeights.reduce(add, 0);
     emitter.defineVariants(experimentName, variantNames, variantWeights);
     assert.equal(emitter.getSortedVariantWeights(experimentName).reduce(add, 0), weightSum);
-    let App = React.createClass({
+    let App = createReactClass({
       render: function(){
         return <WeightedExperiment name={experimentName}>
           {variantNames.map(name => {

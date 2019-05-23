@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import createReactClass from 'create-react-class';
 import WeightedExperiment from "../../src/WeightedExperiment.jsx";
 import Variant from "../../src/Variant.jsx";
 import emitter from "../../src/emitter.jsx";
@@ -28,7 +29,7 @@ describe("WeightedExperiment", function() {
     for(let i = 0; i < 100; i++) {
       variantNames.push(UUID.v4());
     }
-    let App = React.createClass({
+    let App = createReactClass({
       render: function(){
         return <WeightedExperiment name={experimentName}>
           {variantNames.map(name => {
@@ -49,7 +50,7 @@ describe("WeightedExperiment", function() {
       variantNames.push(UUID.v4());
     }
     let defaultVariantName = variantNames[Math.floor(Math.random() * variantNames.length)];
-    let AppWithdefaultVariantName = React.createClass({
+    let AppWithdefaultVariantName = createReactClass({
       render: function(){
         return <WeightedExperiment name={experimentName} defaultVariantName={defaultVariantName}>
           {variantNames.map(name => {
@@ -58,7 +59,7 @@ describe("WeightedExperiment", function() {
         </WeightedExperiment>;
       }
     });
-    let AppWithoutdefaultVariantName = React.createClass({
+    let AppWithoutdefaultVariantName = createReactClass({
       render: function(){
         return <WeightedExperiment name={experimentName}>
           {variantNames.map(name => {
@@ -82,7 +83,7 @@ describe("WeightedExperiment", function() {
   }));
   it("should error if variants are added to a experiment after a variant was selected.", co.wrap(function *(){
     let experimentName = UUID.v4();
-    let AppPart1 = React.createClass({
+    let AppPart1 = createReactClass({
       onClickVariant: function(e){
         this.refs.experiment.win();
       },
@@ -93,7 +94,7 @@ describe("WeightedExperiment", function() {
         </WeightedExperiment>;
       }
     });
-    let AppPart2 = React.createClass({
+    let AppPart2 = createReactClass({
       onClickVariant: function(e){
         this.refs.experiment.win();
       },
@@ -124,7 +125,7 @@ describe("WeightedExperiment", function() {
   it("should not error if variants are added to a experiment after a variant was selected if variants were defined.", co.wrap(function *(){
     let experimentName = UUID.v4();
     emitter.defineVariants(experimentName, ["A", "B", "C", "D"]);
-    let AppPart1 = React.createClass({
+    let AppPart1 = createReactClass({
       onClickVariant: function(e){
         this.refs.experiment.win();
       },
@@ -135,7 +136,7 @@ describe("WeightedExperiment", function() {
         </WeightedExperiment>;
       }
     });
-    let AppPart2 = React.createClass({
+    let AppPart2 = createReactClass({
       onClickVariant: function(e){
         this.refs.experiment.win();
       },
@@ -158,7 +159,7 @@ describe("WeightedExperiment", function() {
   it("should error if a variant is added to an experiment after variants were defined.", co.wrap(function *(){
     let experimentName = UUID.v4();
     emitter.defineVariants(experimentName, ["A", "B", "C"]);
-    let AppPart1 = React.createClass({
+    let AppPart1 = createReactClass({
       onClickVariant: function(e){
         this.refs.experiment.win();
       },
@@ -169,7 +170,7 @@ describe("WeightedExperiment", function() {
         </WeightedExperiment>;
       }
     });
-    let AppPart2 = React.createClass({
+    let AppPart2 = createReactClass({
       onClickVariant: function(e){
         this.refs.experiment.win();
       },
@@ -200,7 +201,7 @@ describe("WeightedExperiment", function() {
   it("should not error if an older test variant is set.", co.wrap(function *(){
     let experimentName = UUID.v4();
     localStorage.setItem("PUSHTELL-" + experimentName, "C");
-    let App = React.createClass({
+    let App = createReactClass({
       render: function(){
         return <WeightedExperiment name={experimentName}>
           <Variant name="A"><a id="variant-a" href="#A" onClick={this.onClickVariant}>A</a></Variant>
@@ -227,7 +228,7 @@ describe("WeightedExperiment", function() {
     };
     let winSubscription = emitter.addWinListener(experimentName, winCallback);
     let winSubscriptionGlobal = emitter.addWinListener(winCallbackGlobal);
-    let App = React.createClass({
+    let App = createReactClass({
       onClickVariant: function(e){
         this.refs.experiment.win();
       },
@@ -257,7 +258,7 @@ describe("WeightedExperiment", function() {
     for(let i = 0; i < 100; i++) {
       variantNames.push(UUID.v4());
     }
-    let App = React.createClass({
+    let App = createReactClass({
       render: function(){
         return <WeightedExperiment name={experimentName} userIdentifier={userIdentifier}>
           {variantNames.map(name => {
