@@ -16,7 +16,7 @@ export default class Experiment extends Component {
 
     constructor(...props) {
         super(...props);
-        if (typeof this.props.runTest !== "undefined" && !emitter.getDefaultVariantName(this.props.name)) {
+        if (typeof props.runTest !== "undefined" && !emitter.getDefaultVariantName(props.name)) {
             throw new Error("Missing default variant for experiment");
         }
 
