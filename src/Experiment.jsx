@@ -20,20 +20,20 @@ export default class Experiment extends Component {
             throw new Error("Missing default variant for experiment");
         }
 
-        const defaultVariant = this.findDefaultVariant();
+        const defaultVariant = this.findDefaultVariant(props);
 
         this.state = {
             defaultVariant: defaultVariant
         };
     }
 
-    findDefaultVariant = () => {
-        const children = React.Children.toArray(this.props.children);
+    findDefaultVariant = (props) => {
+        const children = React.Children.toArray(props.children);
 
         for (let i = 0; i < children.length; i++) {
             const child = children[i];
 
-            if (child.props.name === emitter.getDefaultVariantName(this.props.name)) {
+            if (child.props.name === emitter.getDefaultVariantName(props.name)) {
                 return child;
             }
         }
