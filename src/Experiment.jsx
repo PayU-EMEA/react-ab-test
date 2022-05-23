@@ -16,22 +16,15 @@ export default class Experiment extends Component {
 
     constructor(...props) {
         super(...props);
-
-        this.state = {
-            defaultVariant: null
-        };
-    }
-
-    componentWillMount() {
         if (typeof this.props.runTest !== "undefined" && !emitter.getDefaultVariantName(this.props.name)) {
             throw new Error("Missing default variant for experiment");
         }
 
         const defaultVariant = this.findDefaultVariant();
 
-        this.setState({
+        this.state = {
             defaultVariant: defaultVariant
-        });
+        };
     }
 
     findDefaultVariant = () => {

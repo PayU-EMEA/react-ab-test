@@ -23,6 +23,7 @@ export default class CoreExperiment extends Component {
 
   constructor(props) {
     super();
+    this.state.rawChildren = props.children;
 
     let children = {};
     React.Children.forEach(props.children, element => {
@@ -36,23 +37,7 @@ export default class CoreExperiment extends Component {
     });
     emitter.emit("variants-loaded", props.name);
     this.state.variants = children;
-  }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.value !== this.props.value || nextProps.children !== this.props.children) {
-      let value = typeof nextProps.value === "function" ? nextProps.value() : nextProps.value;
-      let children = {};
-      React.Children.forEach(nextProps.children, element => {
-        children[element.props.name] = element;
-      });
-      this.setState({
-        value: value,
-        variants: children
-      });
-    }
-  }
-
-  componentWillMount() {
     let value = typeof this.props.value === "function" ? this.props.value() : this.props.value;
     if (!this.state.variants[value]) {
       if ("production" !== process.env.NODE_ENV) {
@@ -62,9 +47,27 @@ export default class CoreExperiment extends Component {
     emitter._incrementActiveExperiments(this.props.name);
     emitter.setActiveVariant(this.props.name, value);
     emitter._emitPlay(this.props.name, value);
-    this.setState({
-      value: value
-    });
+    this.state.value = value;
+  }
+
+  static getDerivedStateFromProps(nextProps, state) {
+    if (nextProps.value !== state.value || nextProps.children !== state.rawChildren) {
+      let value = typeof nextProps.value === "function" ? nextProps.value() : nextProps.value;
+      let children = {};
+      React.Children.forEach(nextProps.children, element => {
+        children[element.props.name] = element;
+      });
+      return {
+        value: value,
+        variants: children,
+        rawChildren: nextProps.children
+      };
+    }
+
+    return null;
+  }
+
+  componentDidMount() {
     this.valueSubscription = emitter.addActiveVariantListener(this.props.name, (experimentName, variantName) => {
       this.setState({
         value: variantName
