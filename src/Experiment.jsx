@@ -14,26 +14,26 @@ export default class Experiment extends Component {
 
     static displayName = "Pushtell.Experiment";
 
-    constructor(...props) {
-        super(...props);
-        if (typeof props.runTest !== "undefined" && !emitter.getDefaultVariantName(props.name)) {
+    constructor(props) {
+        super(props);
+        if (typeof this.props.runTest !== "undefined" && !emitter.getDefaultVariantName(this.props.name)) {
             throw new Error("Missing default variant for experiment");
         }
 
-        const defaultVariant = this.findDefaultVariant(props);
+        const defaultVariant = this.findDefaultVariant();
 
         this.state = {
             defaultVariant: defaultVariant
         };
     }
 
-    findDefaultVariant = (props) => {
-        const children = React.Children.toArray(props.children);
+    findDefaultVariant = () => {
+        const children = React.Children.toArray(this.props.children);
 
         for (let i = 0; i < children.length; i++) {
             const child = children[i];
 
-            if (child.props.name === emitter.getDefaultVariantName(props.name)) {
+            if (child.props.name === emitter.getDefaultVariantName(this.props.name)) {
                 return child;
             }
         }

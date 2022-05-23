@@ -22,31 +22,31 @@ export default class CoreExperiment extends Component {
   displayName = "Pushtell.CoreExperiment";
 
   constructor(props) {
-    super();
-    this.state.rawChildren = props.children;
+    super(props);
+    this.state.rawChildren = this.props.children;
 
     let children = {};
-    React.Children.forEach(props.children, element => {
+    React.Children.forEach(this.props.children, element => {
       if (!React.isValidElement(element) || element.type.displayName !== "Pushtell.Variant") {
         let error = new Error("Pushtell Experiment children must be Pushtell Variant components.");
         error.type = "PUSHTELL_INVALID_CHILD";
         throw error;
       }
       children[element.props.name] = element;
-      emitter.addExperimentVariant(props.name, element.props.name);
+      emitter.addExperimentVariant(this.props.name, element.props.name);
     });
-    emitter.emit("variants-loaded", props.name);
+    emitter.emit("variants-loaded", this.props.name);
     this.state.variants = children;
 
-    let value = typeof props.value === "function" ? props.value() : props.value;
+    let value = typeof this.props.value === "function" ? this.props.value() : this.props.value;
     if (!this.state.variants[value]) {
       if ("production" !== process.env.NODE_ENV) {
-        warning(true, 'Experiment “' + props.name + '” does not contain variant “' + value + '”');
+        warning(true, 'Experiment “' + this.props.name + '” does not contain variant “' + value + '”');
       }
     }
-    emitter._incrementActiveExperiments(props.name);
-    emitter.setActiveVariant(props.name, value);
-    emitter._emitPlay(props.name, value);
+    emitter._incrementActiveExperiments(this.props.name);
+    emitter.setActiveVariant(this.props.name, value);
+    emitter._emitPlay(this.props.name, value);
     this.state.value = value;
   }
 
